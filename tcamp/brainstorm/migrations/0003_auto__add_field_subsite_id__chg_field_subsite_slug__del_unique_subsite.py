@@ -8,53 +8,54 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+	pass
         # OMFG Get ready, we're going to change the primary key!
         # Doing bad things, disabling triggers
-        db.execute("ALTER TABLE brainstorm_idea DISABLE TRIGGER ALL;")
+        #db.execute("ALTER TABLE brainstorm_idea DISABLE TRIGGER ALL;")
 
         # Dropping foreign key constraint
-        db.delete_foreign_key('brainstorm_idea', 'subsite_id')
-        db.execute('DROP INDEX brainstorm_idea_subsite_id_like')
-        db.delete_index('brainstorm_idea', ['subsite_id'])
+        #db.delete_foreign_key('brainstorm_idea', 'subsite_id')
+        #db.execute('DROP INDEX brainstorm_idea_subsite_id_like')
+        #db.delete_index('brainstorm_idea', ['subsite_id'])
 
         # Removing primary key on 'Subsite', fields ['slug']
-        db.delete_primary_key(u'brainstorm_subsite')
+        #db.delete_primary_key(u'brainstorm_subsite')
 
         # Adding primary key field 'Subsite.id'
-        db.add_column(u'brainstorm_subsite', u'id',
-                      self.gf('django.db.models.fields.IntegerField')(blank=True, null=True))
+        #db.add_column(u'brainstorm_subsite', u'id',
+        #              self.gf('django.db.models.fields.IntegerField')(blank=True, null=True))
 
         # WOW. Have to manually create AutoFields. Thanks Django!
-        db.execute('CREATE SEQUENCE brainstorm_subsite_id_seq;')
-        db.execute("UPDATE brainstorm_subsite SET id = nextval('brainstorm_subsite_id_seq');")
-        db.execute("ALTER TABLE brainstorm_subsite ALTER COLUMN id SET DEFAULT nextval('brainstorm_subsite_id_seq');")
-        db.execute('ALTER SEQUENCE brainstorm_subsite_id_seq OWNED BY brainstorm_subsite.id;')
-        db.execute("SELECT setval('brainstorm_subsite_id_seq', q.i) FROM(SELECT MAX(id) i FROM brainstorm_subsite) q;")
+        #db.execute('CREATE SEQUENCE brainstorm_subsite_id_seq;')
+        #db.execute("UPDATE brainstorm_subsite SET id = nextval('brainstorm_subsite_id_seq');")
+        #db.execute("ALTER TABLE brainstorm_subsite ALTER COLUMN id SET DEFAULT nextval('brainstorm_subsite_id_seq');")
+        #db.execute('ALTER SEQUENCE brainstorm_subsite_id_seq OWNED BY brainstorm_subsite.id;')
+        #db.execute("SELECT setval('brainstorm_subsite_id_seq', q.i) FROM(SELECT MAX(id) i FROM brainstorm_subsite) q;")
 
         # Now make it the pk
-        db.create_primary_key('brainstorm_subsite', ['id'])
+        #db.create_primary_key('brainstorm_subsite', ['id'])
 
         # Updating foreign key values
-        db.execute('''UPDATE brainstorm_idea idea
-                      SET subsite_id = subsite.id
-                      FROM brainstorm_subsite subsite
-                      WHERE(idea.subsite_id = subsite.slug);''')
+        #db.execute('''UPDATE brainstorm_idea idea
+        #              SET subsite_id = subsite.id
+        #              FROM brainstorm_subsite subsite
+        #              WHERE(idea.subsite_id = subsite.slug);''')
 
         # Casting the fk to an integer
-        db.execute("ALTER TABLE brainstorm_idea ALTER COLUMN subsite_id TYPE integer USING CAST(subsite_id AS integer);")
+        #db.execute("ALTER TABLE brainstorm_idea ALTER COLUMN subsite_id TYPE integer USING CAST(subsite_id AS integer);")
 
         # Re-adding foreign key constraint
-        fk_sql = db.foreign_key_sql('brainstorm_idea', 'subsite_id', 'brainstorm_subsite', 'id')
-        db.execute(fk_sql)
+        #fk_sql = db.foreign_key_sql('brainstorm_idea', 'subsite_id', 'brainstorm_subsite', 'id')
+        #db.execute(fk_sql)
 
         # Changing field 'Subsite.slug' to a plain old slugfield
-        db.alter_column(u'brainstorm_subsite', 'slug', self.gf('django.db.models.fields.SlugField')(max_length=50))
+        #db.alter_column(u'brainstorm_subsite', 'slug', self.gf('django.db.models.fields.SlugField')(max_length=50))
 
         # Adding unique constraint on 'Subsite', fields ['slug']
-        db.create_unique(u'brainstorm_subsite', ['slug'])
+        #db.create_unique(u'brainstorm_subsite', ['slug'])
 
         # Re-enabling triggers
-        db.execute("ALTER TABLE brainstorm_idea ENABLE TRIGGER ALL;")
+        #db.execute("ALTER TABLE brainstorm_idea ENABLE TRIGGER ALL;")
 
     def backwards(self, orm):
         # Deleting field 'Subsite.id'

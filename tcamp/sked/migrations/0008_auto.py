@@ -8,19 +8,21 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+	pass
         # Adding index on 'Location', fields ['name']
-        db.create_index(u'sked_location', ['name'])
+        #db.create_index(u'sked_location', ['name'])
 
         # Adding index on 'Session', fields ['speakers']
-        db.create_index(u'sked_session', ['speakers'])
+        #db.create_index(u'sked_session', ['speakers'])
 
 
     def backwards(self, orm):
+	pass
         # Removing index on 'Session', fields ['speakers']
-        db.delete_index(u'sked_session', ['speakers'])
+        #db.delete_index(u'sked_session', ['speakers'])
 
         # Removing index on 'Location', fields ['name']
-        db.delete_index(u'sked_location', ['name'])
+        #db.delete_index(u'sked_location', ['name'])
 
 
     models = {

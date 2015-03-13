@@ -42,7 +42,7 @@ python-openid
 gunicorn
 gaffer
 gevent
-psycopg2
+Mysql-python
 Pillow
 pytz
 fabric
